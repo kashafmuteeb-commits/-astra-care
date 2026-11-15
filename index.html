@@ -1,273 +1,1066 @@
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASTRA CARE | Astronaut Health</title>
+<meta name="theme-color" content="#071321">
+<title>ASTRA CARE | Astronaut Health Intelligence</title>
 
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: #081321;
-  color: #edf4ff;
-  font-family: Arial, sans-serif;
+:root{
+  --bg:#071321;
+  --panel:#101f30;
+  --panel2:#14283b;
+  --line:#263d52;
+  --text:#edf5ff;
+  --muted:#9bb0c5;
+  --cyan:#48d9e8;
+  --blue:#719cff;
+  --green:#63d6a2;
+  --yellow:#f3c66b;
+  --red:#ff7777;
 }
-header {
-  padding: 25px;
-  background: #10233b;
-  border-bottom: 1px solid #29415d;
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;line-height:1.5;
 }
-header h1 { color: #55d6c2; margin: 0; }
-header p { color: #a9bbd1; }
-main { max-width: 950px; margin: auto; padding: 20px; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
-  gap: 12px;
+header{
+  padding:22px 5%;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
 }
-.card {
-  background: #14263d;
-  border: 1px solid #29415d;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 15px;
+.brand{font-size:23px;font-weight:800;letter-spacing:2px}
+.brand span{color:var(--cyan)}
+.tagline{color:var(--muted);font-size:12px}
+.status{
+  border:1px solid #286b65;color:var(--green);
+  padding:7px 12px;border-radius:30px;font-size:12px;
 }
-.metric { color: #55d6c2; font-size: 25px; font-weight: bold; }
-small { color: #a9bbd1; }
-label { display: block; margin: 13px 0 6px; }
-input, select {
-  width: 100%;
-  padding: 12px;
-  background: #081321;
-  color: white;
-  border: 1px solid #46617e;
-  border-radius: 7px;
+nav{
+  display:flex;gap:8px;overflow-x:auto;padding:14px 5%;
+  border-bottom:1px solid var(--line);
 }
-button {
-  background: #55d6c2;
-  color: #071a28;
-  border: 0;
-  border-radius: 7px;
-  padding: 12px 17px;
-  margin-top: 15px;
-  font-weight: bold;
-  cursor: pointer;
+nav button{
+  white-space:nowrap;background:transparent;color:var(--muted);
+  border:1px solid var(--line);padding:9px 13px;border-radius:8px;
+  cursor:pointer;
 }
-.secondary { background: #29415d; color: white; }
-.entry { border-bottom: 1px solid #46617e; padding: 12px 0; }
-.notice { color: #ffd58a; font-size: 13px; line-height: 1.5; }
-footer { text-align: center; color: #a9bbd1; padding: 25px; }
+nav button.active,nav button:hover{
+  color:var(--cyan);border-color:var(--cyan);
+  background:#102d3c;
+}
+main{max-width:1200px;margin:auto;padding:25px 5% 60px}
+.page{display:none}
+.page.active{display:block}
+h1{font-size:27px;margin:0 0 5px}
+h2{font-size:19px;margin:0 0 15px}
+h3{font-size:15px;margin:0 0 8px}
+p{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;margin:20px 0;
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:18px;margin-bottom:15px;
+}
+.metric{font-size:27px;font-weight:800;margin:8px 0}
+.metric-label{font-size:12px;color:var(--muted)}
+.cyan{color:var(--cyan)}
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+.red{color:var(--red)}
+button,.action{
+  cursor:pointer;border:0;border-radius:8px;padding:11px 15px;
+  background:var(--cyan);color:#06131e;font-weight:700;
+}
+button.secondary{
+  color:var(--text);background:var(--panel2);
+  border:1px solid var(--line);
+}
+button.danger{background:#512b36;color:#ffdce1}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+label{display:block;color:var(--muted);font-size:12px;margin:12px 0 5px}
+input,select,textarea{
+  width:100%;padding:11px;border-radius:8px;
+  border:1px solid var(--line);background:#091827;color:var(--text);
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan)}
+.form-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+}
+.notice{
+  padding:13px;border-left:3px solid var(--yellow);
+  background:#2b271d;border-radius:5px;color:#f8e4b8;
+  font-size:13px;margin:15px 0;
+}
+.info{
+  padding:13px;border-left:3px solid var(--cyan);
+  background:#102b38;border-radius:5px;color:#c9f6fb;
+  font-size:13px;margin:15px 0;
+}
+.alert{
+  padding:14px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel2);margin:10px 0;
+}
+.alert.warning{border-left:4px solid var(--yellow)}
+.alert.critical{border-left:4px solid var(--red)}
+.alert.normal{border-left:4px solid var(--green)}
+.alert-title{font-weight:700;margin-bottom:5px}
+.bar{
+  height:9px;border-radius:10px;background:#26394b;overflow:hidden;
+  margin:8px 0 14px;
+}
+.bar span{display:block;height:100%;background:var(--cyan);width:0%}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+th{color:var(--cyan)}
+.table-wrap{overflow-x:auto}
+canvas{width:100%;height:220px;display:block}
+.source{
+  display:block;color:var(--cyan);text-decoration:none;
+  margin-top:9px;font-size:13px;overflow-wrap:anywhere;
+}
+.source:hover{text-decoration:underline}
+footer{
+  border-top:1px solid var(--line);padding:20px 5%;
+  color:var(--muted);font-size:11px;text-align:center;
+}
+.empty{color:var(--muted);padding:18px;text-align:center}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+@media(max-width:600px){
+  header{align-items:flex-start}
+  h1{font-size:23px}
+  .metric{font-size:23px}
+  main{padding-top:20px}
+}
 </style>
 </head>
 
 <body>
-
 <header>
-  <h1>✦ ASTRA CARE</h1>
-  <p>Astronaut Health Monitoring System</p>
-  <small>OFFLINE-FIRST MISSION HEALTH DASHBOARD</small>
+  <div>
+    <div class="brand">ASTRA <span>CARE</span></div>
+    <div class="tagline">ASTRONAUT HEALTH INTELLIGENCE SYSTEM</div>
+  </div>
+  <div class="status">● PROTOTYPE ONLINE</div>
 </header>
+
+<nav>
+  <button class="active" data-page="dashboard">Dashboard</button>
+  <button data-page="checkin">Health Check-in</button>
+  <button data-page="trends">Trend Analysis</button>
+  <button data-page="mission">Mission Simulator</button>
+  <button data-page="research">NASA Research</button>
+  <button data-page="reports">Reports</button>
+</nav>
 
 <main>
 
-  <section class="grid">
-    <div class="card">
-      <small>Heart Rate</small>
-      <div class="metric" id="heart">--</div>
-      <small>BPM</small>
-    </div>
-    <div class="card">
-      <small>Blood Pressure</small>
-      <div class="metric" id="bp">--</div>
-      <small>mmHg</small>
-    </div>
-    <div class="card">
-      <small>Sleep</small>
-      <div class="metric" id="sleep">--</div>
-      <small>Hours</small>
-    </div>
-    <div class="card">
-      <small>Mood</small>
-      <div class="metric" id="mood">--</div>
-      <small>Daily check-in</small>
-    </div>
-  </section>
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+  <h1>Mission Health Dashboard</h1>
+  <p>Monitor health patterns and wellbeing during long-duration missions.</p>
 
-  <section class="card">
-    <h2>Daily Health Check-in</h2>
+  <div class="notice">
+    DEMONSTRATION MODE: This application is a student research prototype.
+    It is not a medical device and does not diagnose or predict disease.
+  </div>
 
+  <div class="grid">
+    <div class="card">
+      <div class="metric-label">MISSION DAY</div>
+      <div class="metric cyan" id="missionDay">001</div>
+      <div class="small">Simulated mission timeline</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">HEALTH RECORDS</div>
+      <div class="metric" id="recordCount">0</div>
+      <div class="small">Stored on this browser</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">LATEST WELLBEING</div>
+      <div class="metric" id="wellbeingValue">--</div>
+      <div class="small">Prototype indicator, not a diagnosis</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">PATTERN STATUS</div>
+      <div class="metric green" id="patternStatus">No data</div>
+      <div class="small">Based on available check-ins</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Latest Health Summary</h2>
+    <div id="latestSummary" class="empty">
+      No health records yet. Add a check-in or load the mission demonstration.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recent Wellbeing Pattern</h2>
+    <canvas id="dashboardChart" width="900" height="230"></canvas>
+    <div class="small">Illustrative wellbeing index from recorded check-ins.</div>
+  </div>
+
+  <div class="card">
+    <h2>System Capabilities</h2>
+    <div class="grid">
+      <div><span class="cyan">01 /</span> Personal baseline comparison</div>
+      <div><span class="cyan">02 /</span> Repeated trend detection</div>
+      <div><span class="cyan">03 /</span> Wellbeing monitoring</div>
+      <div><span class="cyan">04 /</span> Explainable observations</div>
+      <div><span class="cyan">05 /</span> Mission scenario replay</div>
+      <div><span class="cyan">06 /</span> Medical officer report export</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECK-IN -->
+<section class="page" id="checkin">
+  <h1>Astronaut Health Check-in</h1>
+  <p>Enter a new observation. All fields are stored locally in this browser.</p>
+
+  <div class="card">
+    <h2>Physical Health</h2>
     <form id="healthForm">
+      <div class="form-grid">
+        <div>
+          <label>Mission day</label>
+          <input id="day" type="number" min="1" max="1000" value="1" required>
+        </div>
+        <div>
+          <label>Heart rate (BPM)</label>
+          <input id="hr" type="number" min="20" max="250" required>
+        </div>
+        <div>
+          <label>Systolic blood pressure</label>
+          <input id="sys" type="number" min="50" max="250">
+        </div>
+        <div>
+          <label>Diastolic blood pressure</label>
+          <input id="dia" type="number" min="30" max="150">
+        </div>
+        <div>
+          <label>Body temperature (°C)</label>
+          <input id="temp" type="number" min="30" max="45" step=".1">
+        </div>
+        <div>
+          <label>Sleep (hours)</label>
+          <input id="sleep" type="number" min="0" max="24" step=".1" required>
+        </div>
+      </div>
 
-      <label>Heart Rate (BPM)</label>
-      <input type="number" id="heartInput"
-      min="1" max="300" required>
-
-      <label>Systolic Blood Pressure (mmHg)</label>
-      <input type="number" id="sysInput"
-      min="1" max="300" required>
-
-      <label>Diastolic Blood Pressure (mmHg)</label>
-      <input type="number" id="diaInput"
-      min="1" max="200" required>
-
-      <label>Sleep (hours)</label>
-      <input type="number" id="sleepInput"
-      min="0" max="24" step="0.5" required>
-
-      <label>Daily Mood</label>
-      <select id="moodInput">
-        <option>Good</option>
-        <option>Okay</option>
-        <option>Low</option>
-        <option>Stressed</option>
+      <label>Symptoms or unusual observations</label>
+      <select id="symptom">
+        <option value="none">No unusual symptoms reported</option>
+        <option value="fatigue">Fatigue</option>
+        <option value="headache">Headache</option>
+        <option value="dizziness">Dizziness</option>
+        <option value="breathing">Breathing difficulty</option>
+        <option value="other">Other observation</option>
       </select>
 
-      <button type="submit">Save Health Check-in</button>
+      <hr>
+      <h2>Psychological Wellbeing</h2>
+      <div class="form-grid">
+        <div>
+          <label>Mood (1 = very low, 5 = very good)</label>
+          <input id="mood" type="number" min="1" max="5" value="3" required>
+        </div>
+        <div>
+          <label>Stress (1 = low, 5 = high)</label>
+          <input id="stress" type="number" min="1" max="5" value="2" required>
+        </div>
+        <div>
+          <label>Energy (1 = low, 5 = high)</label>
+          <input id="energy" type="number" min="1" max="5" value="3" required>
+        </div>
+        <div>
+          <label>Focus (1 = low, 5 = high)</label>
+          <input id="focus" type="number" min="1" max="5" value="3" required>
+        </div>
+        <div>
+          <label>Feeling connected to crew (1–5)</label>
+          <input id="connection" type="number" min="1" max="5" value="3" required>
+        </div>
+      </div>
+
+      <label>Additional notes (optional)</label>
+      <textarea id="notes" rows="3" maxlength="500"
+        placeholder="Describe observations without including identifying information."></textarea>
+
+      <div class="actions">
+        <button type="submit">Save Check-in</button>
+        <button type="reset" class="secondary">Clear Form</button>
+      </div>
     </form>
+  </div>
 
-    <p class="notice">
-      Demo software only. This application records readings
-      and does not diagnose medical conditions or replace
-      professional medical assessment.
-    </p>
-  </section>
+  <div class="info">
+    If a real astronaut experiences an urgent or concerning symptom, they should
+    follow mission medical procedures and contact the medical officer. This
+    prototype must never replace that process.
+  </div>
+</section>
 
-  <section class="card">
+<!-- TRENDS -->
+<section class="page" id="trends">
+  <h1>Trend Analysis</h1>
+  <p>Compare repeated observations with an individual's own recorded baseline.</p>
+
+  <div class="info">
+    The baseline is calculated from the first five available records.
+    A pattern flag is an observation for review, not a medical diagnosis.
+  </div>
+
+  <div class="card">
+    <h2>Personal Baseline</h2>
+    <div id="baselinePanel" class="empty">Add at least one record to begin.</div>
+  </div>
+
+  <div class="card">
+    <h2>Explainable Pattern Observations</h2>
+    <div id="alertsPanel" class="empty">No patterns to analyse yet.</div>
+  </div>
+
+  <div class="card">
+    <h2>Wellbeing Trend</h2>
+    <canvas id="trendChart" width="900" height="230"></canvas>
+    <div class="small">The index is a simple prototype calculation, not a validated psychological scale.</div>
+  </div>
+
+  <div class="card">
     <h2>Health History</h2>
-    <div id="history">No readings recorded yet.</div>
-    <button class="secondary" onclick="downloadReport()">
-      Download Health Report
-    </button>
-  </section>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th><th>HR</th><th>Sleep</th>
+            <th>Mood</th><th>Stress</th><th>Symptom</th>
+          </tr>
+        </thead>
+        <tbody id="historyRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-  <section class="card">
-    <h2>Mission Information</h2>
-    <p>Monitoring mode: Local / Offline</p>
-    <p>Storage: This browser on this device</p>
-    <p>Communication with Earth: Not connected</p>
-    <p class="notice">
-      Reports can be exported for later review by the
-      astronaut's medical team.
+<!-- SIMULATOR -->
+<section class="page" id="mission">
+  <h1>150-Day Mission Simulator</h1>
+  <p>Explore how the system responds to changing conditions during a fictional mission.</p>
+
+  <div class="notice">
+    All readings generated by this simulator are fictional and synthetic.
+    They are not actual astronaut measurements or NASA telemetry.
+  </div>
+
+  <div class="card">
+    <h2>Scenario: Long-Duration Exploration Mission</h2>
+    <p>
+      The demonstration starts with a stable personal pattern. Later,
+      the fictional scenario introduces repeated changes in sleep and wellbeing.
+      ASTRA CARE analyses those patterns and explains why they deserve review.
     </p>
-  </section>
+    <div class="grid">
+      <div>
+        <div class="metric cyan">150</div>
+        <div class="metric-label">SIMULATED MISSION DAYS</div>
+      </div>
+      <div>
+        <div class="metric cyan">5</div>
+        <div class="metric-label">BASELINE OBSERVATIONS</div>
+      </div>
+      <div>
+        <div class="metric cyan">3+</div>
+        <div class="metric-label">REPEATED OBSERVATIONS FOR PATTERN FLAG</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="loadDemo">Load Demo Scenario</button>
+      <button id="nextDay" class="secondary" disabled>Advance Scenario</button>
+      <button id="resetDemo" class="danger">Reset Demo Data</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Scenario Replay</h2>
+    <div class="metric cyan" id="simDay">Day 000</div>
+    <div id="simExplanation" class="empty">
+      Load the scenario to begin the demonstration.
+    </div>
+  </div>
+</section>
+
+<!-- NASA RESEARCH -->
+<section class="page" id="research">
+  <h1>NASA Research Library</h1>
+  <p>Research sources that can inform the design of astronaut health monitoring systems.</p>
+
+  <div class="notice">
+    Research data and simulated dashboard readings are different things.
+    ASTRA CARE does not claim that the values shown in its simulator came from NASA.
+  </div>
+
+  <div class="card">
+    <h2>01 / NASA Open Science Data Repository</h2>
+    <p>
+      NASA's Open Science Data Repository provides access to biological and
+      physical research connected to spaceflight and spaceflight analog studies.
+    </p>
+    <a class="source" href="https://osdr.nasa.gov/" target="_blank" rel="noopener">
+      Open NASA OSDR →
+    </a>
+    <a class="source" href="https://osdr.nasa.gov/bio/repo/" target="_blank" rel="noopener">
+      Explore OSDR data →
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>02 / Inspiration4 Research: OSD-569</h2>
+    <p>
+      OSD-569 is a NASA repository study associated with whole-blood measurements
+      from the Inspiration4 mission. The study includes biological measurements
+      taken around the mission, rather than continuous heart-rate or blood-pressure
+      telemetry.
+    </p>
+    <p class="small">
+      Important limitation: this type of research dataset should not be presented
+      as a real-time vital-sign feed.
+    </p>
+    <a class="source" href="https://osdr.nasa.gov/" target="_blank" rel="noopener">
+      Find OSD-569 in NASA OSDR →
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>03 / NASA Human Research Program</h2>
+    <p>
+      NASA's Human Research Program studies risks to astronaut health during
+      space exploration, including changes related to altered gravity,
+      radiation, isolation and other spaceflight hazards.
+    </p>
+    <a class="source" href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">
+      NASA HRP: Risks →
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>04 / NASA Life Sciences Portal</h2>
+    <p>
+      A resource for discovering life-sciences research and datasets related
+      to human spaceflight.
+    </p>
+    <a class="source" href="https://lsda.jsc.nasa.gov/" target="_blank" rel="noopener">
+      NASA Life Sciences Data Archive →
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>Research Integration Plan</h2>
+    <ol>
+      <li>Identify a relevant NASA study and its study ID.</li>
+      <li>Record the variables, collection dates and study limitations.</li>
+      <li>Use only the measurements actually supplied by that study.</li>
+      <li>Keep synthetic mission telemetry in a separate dataset.</li>
+      <li>Cite the source beside every research-derived result.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- REPORTS -->
+<section class="page" id="reports">
+  <h1>Mission Reports</h1>
+  <p>Generate a summary of recorded observations for review.</p>
+
+  <div class="card">
+    <h2>Export Data</h2>
+    <p>Download your browser-stored records as JSON or CSV.</p>
+    <div class="actions">
+      <button id="exportJSON">Export JSON</button>
+      <button id="exportCSV" class="secondary">Export CSV</button>
+      <button id="exportReport" class="secondary">Export Summary Report</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Data Management</h2>
+    <p>
+      Records are stored in local browser storage. They do not automatically
+      synchronize between devices or upload to NASA.
+    </p>
+    <div class="actions">
+      <button id="clearRecords" class="danger">Delete All Local Records</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Project Limitations</h2>
+    <ul>
+      <li>Not clinically validated or approved for medical use.</li>
+      <li>No live connection to spacecraft sensors.</li>
+      <li>No live NASA API integration in this version.</li>
+      <li>Simulated readings are not real astronaut data.</li>
+      <li>Pattern rules are demonstrative and not flight-certified.</li>
+      <li>Browser storage may be lost if local site data is cleared.</li>
+    </ul>
+  </div>
+</section>
 
 </main>
 
 <footer>
-  ASTRA CARE | NASA Space Apps Challenge 2026
-  <br>Student-developed prototype
+  ASTRA CARE 2.0 · Student-built research prototype · Not affiliated with NASA
+  <br>Health observations are for demonstration and research only.
 </footer>
 
 <script>
-let records = [];
+"use strict";
 
-try {
-  records = JSON.parse(
-    localStorage.getItem("astraRecords") || "[]"
-  );
-} catch(e) {
-  records = [];
+const STORAGE_KEY = "astraCareV3Records";
+let records = loadRecords();
+let demoRecords = [];
+let demoPosition = 0;
+
+function loadRecords(){
+  try{
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    return [];
+  }
 }
 
-function updateDashboard() {
-  const latest = records[0];
-
-  if (!latest) return;
-
-  document.getElementById("heart").textContent =
-    latest.heart;
-
-  document.getElementById("bp").textContent =
-    latest.sys + "/" + latest.dia;
-
-  document.getElementById("sleep").textContent =
-    latest.sleep;
-
-  document.getElementById("mood").textContent =
-    latest.mood;
-
-  document.getElementById("history").innerHTML =
-    records.map(r => `
-      <div class="entry">
-        <strong>${r.date}</strong><br>
-        Heart rate: ${r.heart} BPM |
-        BP: ${r.sys}/${r.dia} mmHg<br>
-        Sleep: ${r.sleep} hours |
-        Mood: ${r.mood}
-      </div>
-    `).join("");
+function saveRecords(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
 }
 
-document.getElementById("healthForm")
-.addEventListener("submit", function(e) {
-  e.preventDefault();
+function number(id){
+  const value = document.getElementById(id).value;
+  return value === "" ? null : Number(value);
+}
 
-  const record = {
-    date: new Date().toLocaleString(),
-    heart: Number(document.getElementById("heartInput").value),
-    sys: Number(document.getElementById("sysInput").value),
-    dia: Number(document.getElementById("diaInput").value),
-    sleep: Number(document.getElementById("sleepInput").value),
-    mood: document.getElementById("moodInput").value
+function safeText(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#039;"
+  })[char]);
+}
+
+function wellbeingScore(r){
+  // Demonstration index only. Not a validated clinical or psychological scale.
+  const mood = r.mood || 3;
+  const stress = r.stress || 3;
+  const energy = r.energy || 3;
+  const focus = r.focus || 3;
+  const connection = r.connection || 3;
+
+  const score = (
+    mood * 20 +
+    (6-stress) * 20 +
+    energy * 20 +
+    focus * 20 +
+    connection * 20
+  ) / 5;
+
+  return Math.round(score);
+}
+
+function sortedRecords(){
+  return [...records].sort((a,b) => a.day-b.day);
+}
+
+function baseline(){
+  const data = sortedRecords().slice(0,5);
+  if(data.length < 1) return null;
+
+  const average = key => {
+    const values = data.map(r=>r[key]).filter(v=>v!==null && v!==undefined);
+    if(!values.length) return null;
+    return values.reduce((a,b)=>a+b,0)/values.length;
   };
 
-  if (
-    record.heart <= 0 ||
-    record.sys <= 0 ||
-    record.dia <= 0 ||
-    record.sleep < 0
-  ) {
-    alert("Please enter valid measurements.");
-    return;
-  }
-
-  records.unshift(record);
-
-  try {
-    localStorage.setItem(
-      "astraRecords", JSON.stringify(records)
-    );
-  } catch(error) {
-    records.shift();
-    alert("Could not save data on this device.");
-    return;
-  }
-
-  updateDashboard();
-  this.reset();
-  alert("Health check-in saved successfully.");
-});
-
-function downloadReport() {
-  if (!records.length) {
-    alert("No health readings to export.");
-    return;
-  }
-
-  const report = [
-    "ASTRA CARE - HEALTH REPORT",
-    "DEMO DATA - NOT A MEDICAL DIAGNOSIS",
-    "",
-    ...records.map(r =>
-      `${r.date} | HR: ${r.heart} BPM | BP: ${r.sys}/${r.dia} | Sleep: ${r.sleep} hours | Mood: ${r.mood}`
-    )
-  ].join("\n");
-
-  const file = new Blob([report], {
-    type: "text/plain"
-  });
-
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(file);
-  link.download = "astra-health-report.txt";
-  link.click();
-  URL.revokeObjectURL(link.href);
+  return {
+    count:data.length,
+    hr:average("hr"),
+    sleep:average("sleep"),
+    mood:average("mood"),
+    stress:average("stress"),
+    energy:average("energy"),
+    connection:average("connection")
+  };
 }
 
-updateDashboard();
-</script>
+function trendFlags(){
+  const data = sortedRecords();
+  const base = baseline();
+  if(!base || data.length < 4) return [];
 
+  const flags = [];
+  const recent = data.slice(-3);
+
+  function repeated(key, test){
+    const values = recent.map(r=>r[key]).filter(v=>v!==null && v!==undefined);
+    return values.length === 3 && values.every(test);
+  }
+
+  if(base.sleep !== null && repeated("sleep",v=>v < base.sleep-1)){
+    flags.push({
+      level:"warning",
+      title:"Repeated sleep reduction",
+      detail:"Sleep was more than one hour below the initial personal baseline in each of the last three records.",
+      reason:"The system compares recent sleep observations with the average of the first five available records.",
+      action:"Review the sleep pattern with the mission medical or wellbeing team."
+    });
+  }
+
+  if(base.mood !== null && repeated("mood",v=>v <= base.mood-1)){
+    flags.push({
+      level:"warning",
+      
+      title:"Repeated mood decline",
+      detail:"Mood ratings were at least one point below the initial baseline in the last three records.",
+      reason:"The system detects a repeated change in self-reported mood.",
+      action:"Check in with the crew member and follow the mission wellbeing support process."
+    });
+  }
+
+  if(base.stress !== null && repeated("stress",v=>v >= base.stress+1)){
+    flags.push({
+      level:"warning",
+      title:"Repeated stress increase",
+      detail:"Stress ratings were at least one point above the initial baseline in the last three records.",
+      reason:"The system detects repeated changes in self-reported stress.",
+      action:"Review workload, rest and available crew support."
+    });
+  }
+
+  if(base.hr !== null && repeated("hr",v=>Math.abs(v-base.hr) > base.hr*.15)){
+    flags.push({
+      level:"warning",
+      title:"Repeated heart-rate variation",
+      detail:"Heart-rate readings differed from the initial baseline by more than 15% in the last three records.",
+      reason:"This is a demonstration rule, not a medical threshold.",
+      action:"Verify readings and refer them to a qualified medical officer."
+    });
+  }
+
+  const latest = data[data.length-1];
+
+  if(latest && latest.symptom === "breathing"){
+    flags.push({
+      level:"critical",
+      title:"Urgent symptom reported",
+      detail:"The latest check-in records breathing difficulty.",
+      reason:"This prototype cannot safely assess urgent symptoms.",
+      action:"Follow mission emergency procedures and contact the medical officer immediately."
+    });
+  }
+
+  return flags;
+}
+
+function drawChart(canvasId, values){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle="#263d52";
+
+  for(let i=1;i<=4;i++){
+    const y=(h/5)*i;
+    ctx.beginPath();
+    ctx.moveTo(35,y);
+    ctx.lineTo(w-15,y);
+    ctx.stroke();
+  }
+
+  if(!values.length){
+    ctx.fillStyle="#9bb0c5";
+    ctx.font="15px Arial";
+    ctx.fillText("No data available yet",35,35);
+    return;
+  }
+
+  const left=40;
+  const right=w-20;
+  const top=15;
+  const bottom=h-30;
+  const xStep=values.length>1?(right-left)/(values.length-1):0;
+
+  ctx.strokeStyle="#48d9e8";
+  ctx.lineWidth=3;
+  ctx.beginPath();
+
+  values.forEach((v,i)=>{
+    const x=left+i*xStep;
+    const y=bottom-(Math.max(0,Math.min(100,v))/100)*(bottom-top);
+    if(i===0)ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  });
+
+  ctx.stroke();
+
+  values.forEach((v,i)=>{
+    const x=left+i*xStep;
+    const y=bottom-(Math.max(0,Math.min(100,v))/100)*(bottom-top);
+
+    ctx.fillStyle="#48d9e8";
+    ctx.beginPath();
+    ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fill();
+  });
+}
+
+function render(){
+  const data=sortedRecords();
+  const latest=data[data.length-1];
+  const flags=trendFlags();
+
+  document.getElementById("recordCount").textContent=data.length;
+
+  document.getElementById("missionDay").textContent=
+    latest ? String(latest.day).padStart(3,"0") : "001";
+
+  document.getElementById("wellbeingValue").textContent=
+    latest ? wellbeingScore(latest)+"/100" : "--";
+
+  const status=document.getElementById("patternStatus");
+  status.textContent=!data.length?"No data":flags.length?"Review patterns":"No flags";
+  status.className="metric "+(!data.length?"":flags.length?"yellow":"green");
+
+  const summary=document.getElementById("latestSummary");
+
+  if(!latest){
+    summary.textContent="No health records yet.";
+  }else{
+    summary.innerHTML=`
+      <div class="grid">
+        <div><span class="small">MISSION DAY</span>
+          <div class="metric">${latest.day}</div></div>
+        <div><span class="small">HEART RATE</span>
+          <div class="metric">${latest.hr} BPM</div></div>
+        <div><span class="small">SLEEP</span>
+          <div class="metric">${latest.sleep} hrs</div></div>
+        <div><span class="small">WELLBEING INDEX</span>
+          <div class="metric">${wellbeingScore(latest)}/100</div></div>
+      </div>
+      <p>Latest reported symptom: ${safeText(latest.symptom)}</p>
+      <p class="small">Observations only. Not a medical assessment.</p>
+    `;
+  }
+
+  const base=baseline();
+  const bp=document.getElementById("baselinePanel");
+
+  if(!base){
+    bp.textContent="Add records to establish a baseline.";
+  }else{
+    bp.innerHTML=`
+      <p>Based on ${base.count} initial record(s).</p>
+      <div class="grid">
+        <div>Heart rate: <b>${base.hr===null?"--":base.hr.toFixed(1)+" BPM"}</b></div>
+        <div>Sleep: <b>${base.sleep===null?"--":base.sleep.toFixed(1)+" hours"}</b></div>
+        <div>Mood: <b>${base.mood===null?"--":base.mood.toFixed(1)+"/5"}</b></div>
+        <div>Stress: <b>${base.stress===null?"--":base.stress.toFixed(1)+"/5"}</b></div>
+      </div>
+    `;
+  }
+
+  const ap=document.getElementById("alertsPanel");
+
+  if(!data.length){
+    ap.textContent="No records to analyse.";
+  }else if(!flags.length){
+    ap.innerHTML=`
+      <div class="alert normal">
+        <div class="alert-title">No repeated pattern flags detected</div>
+        No repeated changes matched the demonstration rules.
+        This does not mean the astronaut is medically healthy.
+      </div>`;
+  }else{
+    ap.innerHTML=flags.map(f=>`
+      <div class="alert ${f.level}">
+        <div class="alert-title">${safeText(f.title)}</div>
+        <p>${safeText(f.detail)}</p>
+        <p><b>Why flagged:</b> ${safeText(f.reason)}</p>
+        <p><b>Suggested next step:</b> ${safeText(f.action)}</p>
+      </div>
+    `).join("");
+  }
+
+  const rows=document.getElementById("historyRows");
+
+  rows.innerHTML=data.slice().reverse().map(r=>`
+    <tr>
+      <td>${r.day}</td>
+      <td>${r.hr}</td>
+      <td>${r.sleep}</td>
+      <td>${r.mood}/5</td>
+      <td>${r.stress}/5</td>
+      <td>${safeText(r.symptom)}</td>
+    </tr>
+  `).join("");
+
+  const scores=data.map(wellbeingScore);
+
+  drawChart("dashboardChart",scores);
+  drawChart("trendChart",scores);
+}
+
+// NAVIGATION
+document.querySelectorAll("nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("nav button")
+      .forEach(b=>b.classList.remove("active"));
+
+    document.querySelectorAll(".page")
+      .forEach(p=>p.classList.remove("active"));
+
+    button.classList.add("active");
+
+    document.getElementById(button.dataset.page)
+      .classList.add("active");
+
+    render();
+  });
+});
+
+// HEALTH CHECK-IN
+document.getElementById("healthForm").addEventListener("submit",event=>{
+  event.preventDefault();
+
+  const r={
+    day:number("day"),
+    hr:number("hr"),
+    sys:number("sys"),
+    dia:number("dia"),
+    temp:number("temp"),
+    sleep:number("sleep"),
+    symptom:document.getElementById("symptom").value,
+    mood:number("mood"),
+    stress:number("stress"),
+    energy:number("energy"),
+    focus:number("focus"),
+    connection:number("connection"),
+    notes:document.getElementById("notes").value.trim(),
+    source:"manual",
+    recordedAt:new Date().toISOString()
+  };
+
+  if(records.some(x=>x.day===r.day)){
+    alert("A record for this mission day already exists.");
+    return;
+  }
+
+  records.push(r);
+  saveRecords();
+  render();
+
+  alert("Check-in saved successfully.");
+  event.target.reset();
+});
+
+// SYNTHETIC MISSION SCENARIO
+function makeDemoRecord(day){
+  const early=day<=25;
+  const change=day>=60;
+  const late=day>=90;
+
+  return {
+    day,
+    hr:Math.round(early?68+(day%3):change?78+(day%4):70+(day%5)),
+    sys:early?115:change?121:117,
+    dia:early?75:change?79:76,
+    temp:early?36.7:36.8,
+    sleep:early?7.5+(day%2)*.2:change?5.5+(day%3)*.2:7.1,
+    symptom:"none",
+    mood:early?4:late?2:change?3:4,
+    stress:early?2:change?4:3,
+    energy:early?4:change?2:3,
+    focus:early?4:change?3:3,
+    connection:early?4:late?2:change?3:4,
+    notes:"Synthetic scenario reading. Not actual astronaut data.",
+    source:"synthetic-demo",
+    recordedAt:new Date().toISOString()
+  };
+}
+
+document.getElementById("loadDemo").addEventListener("click",()=>{
+  if(records.length && !confirm(
+    "This replaces current records with fictional demo data. Continue?"
+  ))return;
+
+  demoRecords=[];
+
+  for(let day=1;day<=150;day+=5){
+    demoRecords.push(makeDemoRecord(day));
+  }
+
+  demoPosition=0;
+  records=[];
+
+  document.getElementById("nextDay").disabled=false;
+  advanceDemo();
+});
+
+function advanceDemo(){
+  if(demoPosition>=demoRecords.length){
+    document.getElementById("nextDay").disabled=true;
+
+    document.getElementById("simExplanation").textContent=
+      "The 150-day demonstration has ended. Review the analysis and export the report.";
+
+    return;
+  }
+
+  const r=demoRecords[demoPosition];
+
+  records.push(r);
+  demoPosition++;
+
+  saveRecords();
+
+  document.getElementById("simDay").textContent=
+    "Day "+String(r.day).padStart(3,"0");
+
+  document.getElementById("simExplanation").textContent=
+    "Loaded synthetic observations for mission day "+r.day+
+    ". Total observations: "+records.length+
+    ". Continue advancing to reveal longer-term patterns.";
+
+  render();
+}
+
+document.getElementById("nextDay").addEventListener("click",advanceDemo);
+
+document.getElementById("resetDemo").addEventListener("click",()=>{
+  if(!confirm("Delete all records and reset the simulator?"))return;
+
+  records=[];
+  demoRecords=[];
+  demoPosition=0;
+
+  saveRecords();
+
+  document.getElementById("nextDay").disabled=true;
+  document.getElementById("simDay").textContent="Day 000";
+
+  document.getElementById("simExplanation").textContent=
+    "Simulator reset. Load the scenario to begin again.";
+
+  render();
+});
+
+// FILE DOWNLOAD FUNCTION
+function downloadFile(filename,content,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=filename;
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+// EXPORT JSON
+document.getElementById("exportJSON").addEventListener("click",()=>{
+  downloadFile(
+    "astra-care-data.json",
+    JSON.stringify(records,null,2),
+    "application/json"
+  );
+});
+
+// EXPORT CSV
+document.getElementById("exportCSV").addEventListener("click",()=>{
+  const fields=[
+    "day","hr","sys","dia","temp","sleep",
+    "symptom","mood","stress","energy",
+    "focus","connection","source","notes"
+  ];
+
+  const quote=value=>
+    '"'+String(value??"").replace(/"/g,'""')+'"';
+
+  const csv=[
+    fields.join(","),
+    ...records.map(r=>fields.map(f=>quote(r[f])).join(","))
+  ].join("\n");
+
+  downloadFile("astra-care-data.csv",csv,"text/csv");
+});
+
+// EXPORT SUMMARY REPORT
+document.getElementById("exportReport").addEventListener("click",()=>{
+  const data=sortedRecords();
+  const base=baseline();
+  const flags=trendFlags();
+  const latest=data[data.length-1];
+
+  const report=[
+    "ASTRA CARE - MISSION HEALTH SUMMARY",
+    "===================================",
+    "Generated: "+new Date().toLocaleString(),
+    "Records: "+data.length,
+    "Contains synthetic readings: "+
+      data.some(r=>r.source==="synthetic-demo"),
+    "",
+    "LATEST OBSERVATION",
+    latest?JSON.stringify(latest,null,2):"No records",
+    "",
+    "PERSONAL BASELINE",
+    base?JSON.stringify(base,null,2):"Not available",
+    "",
+    "PATTERN OBSERVATIONS",
+    flags.length
+      ?flags.map(f=>f.title+": "+f.detail+
+        " Next step: "+f.action).join("\n\n")
+      :"No pattern flags detected.",
+    "",
+    "LIMITATIONS",
+    "Student-built prototype. Not clinically validated.",
+    "Pattern flags are illustrative and not medical diagnoses.",
+    "Synthetic data must not be represented as real astronaut data."
+  ].join("\n");
+
+  downloadFile(
+    "astra-care-mission-report.txt",
+    report,
+    "text/plain"
+  );
+});
+
+// DELETE LOCAL DATA
+document.getElementById("clearRecords").addEventListener("click",()=>{
+  if(!confirm(
+    "Permanently delete all ASTRA CARE records stored in this browser?"
+  ))return;
+
+  records=[];
+  saveRecords();
+  render();
+});
+
+// INITIALIZE APPLICATION
+render();
+
+</script>
 </body>
 </html>
