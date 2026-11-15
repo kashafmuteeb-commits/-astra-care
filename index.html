@@ -1062,5 +1062,626 @@ document.getElementById("clearRecords").addEventListener("click",()=>{
 render();
 
 </script>
+ 
+<!-- ASTRA CARE: ACTION GUIDANCE MODULE -->
+<style>
+.action-guidance {
+  margin: 30px auto;
+  padding: 24px;
+  max-width: 1100px;
+  background: #102235;
+  border: 1px solid #29465d;
+  border-radius: 18px;
+  color: #eff6fc;
+  font-family: Arial, sans-serif;
+}
+.action-guidance h2 {
+  color: #48d9e8;
+  margin-top: 0;
+}
+.action-guidance p {
+  color: #b4c8d9;
+  line-height: 1.6;
+}
+.ag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+.ag-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ag-field label {
+  color: #48d9e8;
+  font-size: 14px;
+  font-weight: bold;
+}
+.ag-field select {
+  padding: 12px;
+  border-radius: 8px;
+  background: #071727;
+  border: 1px solid #35536c;
+  color: white;
+  width: 100%;
+}
+.ag-button {
+  background: #48d9e8;
+  color: #071727;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 22px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.ag-result {
+  display: none;
+  margin-top: 22px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #071727;
+  border-left: 4px solid #48d9e8;
+  line-height: 1.7;
+}
+.ag-result h3 {
+  color: #48d9e8;
+}
+.ag-result strong {
+  color: #ffffff;
+}
+.ag-note {
+  font-size: 12px;
+  color: #9bb0c5 !important;
+  margin-top: 18px;
+}
+</style>
+
+<section class="action-guidance" id="actionGuidance">
+
+  <h2>ASTRA CARE | Action Guidance</h2>
+
+  <p>
+    Review a health observation, understand possible spaceflight-related
+    factors, and identify an appropriate next step.
+  </p>
+
+  <div class="ag-grid">
+
+    <div class="ag-field">
+      <label for="agIndicator">Select health indicator</label>
+      <select id="agIndicator">
+        <option value="heart">Heart rate / cardiovascular</option>
+        <option value="blood">Blood pressure</option>
+        <option value="sleep">Sleep and fatigue</option>
+        <option value="temperature">Body temperature</option>
+        <option value="mood">Mood and stress</option>
+        <option value="activity">Physical activity</option>
+        <option value="breathing">Breathing difficulty</option>
+        <option value="dizziness">Dizziness or balance</option>
+      </select>
+    </div>
+
+    <div class="ag-field">
+      <label for="agChange">What did you observe?</label>
+      <select id="agChange">
+        <option value="normal">No unusual change</option>
+        <option value="new">A new change from baseline</option>
+        <option value="repeat">A repeated or persistent change</option>
+        <option value="urgent">A severe or urgent symptom</option>
+      </select>
+    </div>
+
+    <div class="ag-field">
+      <label for="agDuration">How long has it been observed?</label>
+      <select id="agDuration">
+        <option value="once">One observation</option>
+        <option value="repeated">More than one observation</option>
+        <option value="ongoing">Ongoing or worsening</option>
+      </select>
+    </div>
+
+  </div>
+
+  <button class="ag-button" onclick="assessAstronautHealth()">
+    Assess Observation
+  </button>
+
+  <div class="ag-result" id="agResult" aria-live="polite">
+    <h3 id="agTitle"></h3>
+    <p><strong>Possible spaceflight connection:</strong>
+      <span id="agConnection"></span>
+    </p>
+    <p><strong>Suggested measurement:</strong>
+      <span id="agMeasurement"></span>
+    </p>
+    <p><strong>Recommended next step:</strong>
+      <span id="agAction"></span>
+    </p>
+    <p><strong>Attention level:</strong>
+      <span id="agLevel"></span>
+    </p>
+  </div>
+
+  <p class="ag-note">
+    Important: This is an educational prototype, not a diagnostic
+    or treatment system. It does not establish medical thresholds,
+    prescribe medication, or replace mission medical protocols.
+  </p>
+
+</section>
+
+<script>
+function assessAstronautHealth() {
+
+  const indicator =
+    document.getElementById("agIndicator").value;
+
+  const change =
+    document.getElementById("agChange").value;
+
+  const duration =
+    document.getElementById("agDuration").value;
+
+  const result =
+    document.getElementById("agResult");
+
+  const title =
+    document.getElementById("agTitle");
+
+  const connection =
+    document.getElementById("agConnection");
+
+  const measurement =
+    document.getElementById("agMeasurement");
+
+  const action =
+    document.getElementById("agAction");
+
+  const level =
+    document.getElementById("agLevel");
+
+  const healthData = {
+
+    heart: {
+      name: "Cardiovascular observation",
+      connection:
+        "Microgravity can influence fluid distribution and cardiovascular adaptation.",
+      measurement:
+        "Repeat heart-rate measurement and review ECG data if available.",
+      action:
+        "Compare with the astronaut's personal baseline and follow the mission medical team's review process."
+    },
+
+    blood: {
+      name: "Blood pressure observation",
+      connection:
+        "Fluid shifts and cardiovascular adaptation can influence circulatory measurements.",
+      measurement:
+        "Repeat blood pressure using the approved measurement procedure.",
+      action:
+        "Record the result, check measurement conditions and request medical review if the change persists."
+    },
+
+    sleep: {
+      name: "Sleep and fatigue observation",
+      connection:
+        "Disrupted light-dark cycles, workload and mission schedules can affect sleep.",
+      measurement:
+        "Review sleep duration, sleep timing and fatigue check-ins.",
+      action:
+        "Review the sleep schedule, rest opportunities and mission-approved sleep-support practices."
+    },
+
+    temperature: {
+      name: "Temperature observation",
+      connection:
+        "Environmental conditions, illness and physiological changes can influence temperature.",
+      measurement:
+        "Repeat the temperature measurement with an approved device.",
+      action:
+        "Check the measurement conditions and consult the medical officer if abnormal results persist."
+    },
+
+    mood: {
+      name: "Psychological wellbeing observation",
+      connection:
+        "Isolation, confinement, workload and disrupted routines can affect wellbeing.",
+      measurement:
+        "Review self-reported mood, stress and wellbeing trends.",
+      action:
+        "Consider crew support, appropriate rest and access to mission psychological support resources."
+    },
+
+    activity: {
+      name: "Physical activity observation",
+      connection:
+        "Microgravity can contribute to muscle and bone deconditioning.",
+      measurement:
+        "Review exercise records, activity levels and approved fitness assessments.",
+      action:
+        "Follow the mission's prescribed exercise programme and request specialist review if performance changes persist."
+    },
+
+    breathing: {
+      name: "Breathing difficulty reported",
+      connection:
+        "Breathing symptoms can have multiple causes and cannot be safely assessed by this prototype.",
+      measurement:
+        "Follow the mission medical team's approved assessment procedures.",
+      action:
+        "Follow mission emergency procedures and contact the medical officer immediately."
+    },
+
+    dizziness: {
+      name: "Balance or dizziness observation",
+      connection:
+        "Altered gravity can affect balance and sensory adaptation.",
+      measurement:
+        "Record the symptoms and follow approved balance and medical assessments.",
+      action:
+        "Inform the medical officer. Follow mission safety procedures before continuing activities."
+    }
+
+  };
+
+  const selected = healthData[indicator];
+
+  let attention = "";
+  let heading = "";
+
+  if (change === "urgent" ||
+      indicator === "breathing" && change !== "normal") {
+
+    attention = "URGENT: Follow mission emergency procedures.";
+    heading = "Urgent medical attention";
+
+  } else if (change === "repeat" ||
+             duration === "ongoing") {
+
+    attention = "Prompt review by the qualified medical officer.";
+    heading = "Persistent change detected";
+
+  } else if (change === "new" ||
+             duration === "repeated") {
+
+    attention = "Review the observation and compare it with baseline.";
+    heading = "Observation requires review";
+
+  } else {
+
+    attention = "Continue routine monitoring according to mission protocol.";
+    heading = "Routine observation";
+
+  }
+
+  title.textContent = selected.name;
+  connection.textContent = selected.connection;
+  measurement.textContent = selected.measurement;
+  action.textContent = selected.action;
+  level.textContent = attention;
+
+  result.style.display = "block";
+
+  result.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+</script>
+<!-- END ASTRA CARE ACTION GUIDANCE -->
+ 
+<!-- ASTRA CARE: ACTION GUIDANCE MODULE -->
+<style>
+.action-guidance {
+  margin: 30px auto;
+  padding: 24px;
+  max-width: 1100px;
+  background: #102235;
+  border: 1px solid #29465d;
+  border-radius: 18px;
+  color: #eff6fc;
+  font-family: Arial, sans-serif;
+}
+.action-guidance h2 {
+  color: #48d9e8;
+  margin-top: 0;
+}
+.action-guidance p {
+  color: #b4c8d9;
+  line-height: 1.6;
+}
+.ag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+.ag-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ag-field label {
+  color: #48d9e8;
+  font-size: 14px;
+  font-weight: bold;
+}
+.ag-field select {
+  padding: 12px;
+  border-radius: 8px;
+  background: #071727;
+  border: 1px solid #35536c;
+  color: white;
+  width: 100%;
+}
+.ag-button {
+  background: #48d9e8;
+  color: #071727;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 22px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.ag-result {
+  display: none;
+  margin-top: 22px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #071727;
+  border-left: 4px solid #48d9e8;
+  line-height: 1.7;
+}
+.ag-result h3 {
+  color: #48d9e8;
+}
+.ag-result strong {
+  color: #ffffff;
+}
+.ag-note {
+  font-size: 12px;
+  color: #9bb0c5 !important;
+  margin-top: 18px;
+}
+</style>
+
+<section class="action-guidance" id="actionGuidance">
+
+  <h2>ASTRA CARE | Action Guidance</h2>
+
+  <p>
+    Review a health observation, understand possible spaceflight-related
+    factors, and identify an appropriate next step.
+  </p>
+
+  <div class="ag-grid">
+
+    <div class="ag-field">
+      <label for="agIndicator">Select health indicator</label>
+      <select id="agIndicator">
+        <option value="heart">Heart rate / cardiovascular</option>
+        <option value="blood">Blood pressure</option>
+        <option value="sleep">Sleep and fatigue</option>
+        <option value="temperature">Body temperature</option>
+        <option value="mood">Mood and stress</option>
+        <option value="activity">Physical activity</option>
+        <option value="breathing">Breathing difficulty</option>
+        <option value="dizziness">Dizziness or balance</option>
+      </select>
+    </div>
+
+    <div class="ag-field">
+      <label for="agChange">What did you observe?</label>
+      <select id="agChange">
+        <option value="normal">No unusual change</option>
+        <option value="new">A new change from baseline</option>
+        <option value="repeat">A repeated or persistent change</option>
+        <option value="urgent">A severe or urgent symptom</option>
+      </select>
+    </div>
+
+    <div class="ag-field">
+      <label for="agDuration">How long has it been observed?</label>
+      <select id="agDuration">
+        <option value="once">One observation</option>
+        <option value="repeated">More than one observation</option>
+        <option value="ongoing">Ongoing or worsening</option>
+      </select>
+    </div>
+
+  </div>
+
+  <button class="ag-button" onclick="assessAstronautHealth()">
+    Assess Observation
+  </button>
+
+  <div class="ag-result" id="agResult" aria-live="polite">
+    <h3 id="agTitle"></h3>
+    <p><strong>Possible spaceflight connection:</strong>
+      <span id="agConnection"></span>
+    </p>
+    <p><strong>Suggested measurement:</strong>
+      <span id="agMeasurement"></span>
+    </p>
+    <p><strong>Recommended next step:</strong>
+      <span id="agAction"></span>
+    </p>
+    <p><strong>Attention level:</strong>
+      <span id="agLevel"></span>
+    </p>
+  </div>
+
+  <p class="ag-note">
+    Important: This is an educational prototype, not a diagnostic
+    or treatment system. It does not establish medical thresholds,
+    prescribe medication, or replace mission medical protocols.
+  </p>
+
+</section>
+
+<script>
+function assessAstronautHealth() {
+
+  const indicator =
+    document.getElementById("agIndicator").value;
+
+  const change =
+    document.getElementById("agChange").value;
+
+  const duration =
+    document.getElementById("agDuration").value;
+
+  const result =
+    document.getElementById("agResult");
+
+  const title =
+    document.getElementById("agTitle");
+
+  const connection =
+    document.getElementById("agConnection");
+
+  const measurement =
+    document.getElementById("agMeasurement");
+
+  const action =
+    document.getElementById("agAction");
+
+  const level =
+    document.getElementById("agLevel");
+
+  const healthData = {
+
+    heart: {
+      name: "Cardiovascular observation",
+      connection:
+        "Microgravity can influence fluid distribution and cardiovascular adaptation.",
+      measurement:
+        "Repeat heart-rate measurement and review ECG data if available.",
+      action:
+        "Compare with the astronaut's personal baseline and follow the mission medical team's review process."
+    },
+
+    blood: {
+      name: "Blood pressure observation",
+      connection:
+        "Fluid shifts and cardiovascular adaptation can influence circulatory measurements.",
+      measurement:
+        "Repeat blood pressure using the approved measurement procedure.",
+      action:
+        "Record the result, check measurement conditions and request medical review if the change persists."
+    },
+
+    sleep: {
+      name: "Sleep and fatigue observation",
+      connection:
+        "Disrupted light-dark cycles, workload and mission schedules can affect sleep.",
+      measurement:
+        "Review sleep duration, sleep timing and fatigue check-ins.",
+      action:
+        "Review the sleep schedule, rest opportunities and mission-approved sleep-support practices."
+    },
+
+    temperature: {
+      name: "Temperature observation",
+      connection:
+        "Environmental conditions, illness and physiological changes can influence temperature.",
+      measurement:
+        "Repeat the temperature measurement with an approved device.",
+      action:
+        "Check the measurement conditions and consult the medical officer if abnormal results persist."
+    },
+
+    mood: {
+      name: "Psychological wellbeing observation",
+      connection:
+        "Isolation, confinement, workload and disrupted routines can affect wellbeing.",
+      measurement:
+        "Review self-reported mood, stress and wellbeing trends.",
+      action:
+        "Consider crew support, appropriate rest and access to mission psychological support resources."
+    },
+
+    activity: {
+      name: "Physical activity observation",
+      connection:
+        "Microgravity can contribute to muscle and bone deconditioning.",
+      measurement:
+        "Review exercise records, activity levels and approved fitness assessments.",
+      action:
+        "Follow the mission's prescribed exercise programme and request specialist review if performance changes persist."
+    },
+
+    breathing: {
+      name: "Breathing difficulty reported",
+      connection:
+        "Breathing symptoms can have multiple causes and cannot be safely assessed by this prototype.",
+      measurement:
+        "Follow the mission medical team's approved assessment procedures.",
+      action:
+        "Follow mission emergency procedures and contact the medical officer immediately."
+    },
+
+    dizziness: {
+      name: "Balance or dizziness observation",
+      connection:
+        "Altered gravity can affect balance and sensory adaptation.",
+      measurement:
+        "Record the symptoms and follow approved balance and medical assessments.",
+      action:
+        "Inform the medical officer. Follow mission safety procedures before continuing activities."
+    }
+
+  };
+
+  const selected = healthData[indicator];
+
+  let attention = "";
+  let heading = "";
+
+  if (change === "urgent" ||
+      indicator === "breathing" && change !== "normal") {
+
+    attention = "URGENT: Follow mission emergency procedures.";
+    heading = "Urgent medical attention";
+
+  } else if (change === "repeat" ||
+             duration === "ongoing") {
+
+    attention = "Prompt review by the qualified medical officer.";
+    heading = "Persistent change detected";
+
+  } else if (change === "new" ||
+             duration === "repeated") {
+
+    attention = "Review the observation and compare it with baseline.";
+    heading = "Observation requires review";
+
+  } else {
+
+    attention = "Continue routine monitoring according to mission protocol.";
+    heading = "Routine observation";
+
+  }
+
+  title.textContent = selected.name;
+  connection.textContent = selected.connection;
+  measurement.textContent = selected.measurement;
+  action.textContent = selected.action;
+  level.textContent = attention;
+
+  result.style.display = "block";
+
+  result.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+</script>
+<!-- END ASTRA CARE ACTION GUIDANCE -->
+ 
 </body>
 </html>
