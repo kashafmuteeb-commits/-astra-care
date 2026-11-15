@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTRA CARE | Astronaut Health</title>
+
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #081321;
+  color: #edf4ff;
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 25px;
+  background: #10233b;
+  border-bottom: 1px solid #29415d;
+}
+header h1 { color: #55d6c2; margin: 0; }
+header p { color: #a9bbd1; }
+main { max-width: 950px; margin: auto; padding: 20px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
+  gap: 12px;
+}
+.card {
+  background: #14263d;
+  border: 1px solid #29415d;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 15px;
+}
+.metric { color: #55d6c2; font-size: 25px; font-weight: bold; }
+small { color: #a9bbd1; }
+label { display: block; margin: 13px 0 6px; }
+input, select {
+  width: 100%;
+  padding: 12px;
+  background: #081321;
+  color: white;
+  border: 1px solid #46617e;
+  border-radius: 7px;
+}
+button {
+  background: #55d6c2;
+  color: #071a28;
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 17px;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.secondary { background: #29415d; color: white; }
+.entry { border-bottom: 1px solid #46617e; padding: 12px 0; }
+.notice { color: #ffd58a; font-size: 13px; line-height: 1.5; }
+footer { text-align: center; color: #a9bbd1; padding: 25px; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>✦ ASTRA CARE</h1>
+  <p>Astronaut Health Monitoring System</p>
+  <small>OFFLINE-FIRST MISSION HEALTH DASHBOARD</small>
+</header>
+
+<main>
+
+  <section class="grid">
+    <div class="card">
+      <small>Heart Rate</small>
+      <div class="metric" id="heart">--</div>
+      <small>BPM</small>
+    </div>
+    <div class="card">
+      <small>Blood Pressure</small>
+      <div class="metric" id="bp">--</div>
+      <small>mmHg</small>
+    </div>
+    <div class="card">
+      <small>Sleep</small>
+      <div class="metric" id="sleep">--</div>
+      <small>Hours</small>
+    </div>
+    <div class="card">
+      <small>Mood</small>
+      <div class="metric" id="mood">--</div>
+      <small>Daily check-in</small>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Daily Health Check-in</h2>
+
+    <form id="healthForm">
+
+      <label>Heart Rate (BPM)</label>
+      <input type="number" id="heartInput"
+      min="1" max="300" required>
+
+      <label>Systolic Blood Pressure (mmHg)</label>
+      <input type="number" id="sysInput"
+      min="1" max="300" required>
+
+      <label>Diastolic Blood Pressure (mmHg)</label>
+      <input type="number" id="diaInput"
+      min="1" max="200" required>
+
+      <label>Sleep (hours)</label>
+      <input type="number" id="sleepInput"
+      min="0" max="24" step="0.5" required>
+
+      <label>Daily Mood</label>
+      <select id="moodInput">
+        <option>Good</option>
+        <option>Okay</option>
+        <option>Low</option>
+        <option>Stressed</option>
+      </select>
+
+      <button type="submit">Save Health Check-in</button>
+    </form>
+
+    <p class="notice">
+      Demo software only. This application records readings
+      and does not diagnose medical conditions or replace
+      professional medical assessment.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Health History</h2>
+    <div id="history">No readings recorded yet.</div>
+    <button class="secondary" onclick="downloadReport()">
+      Download Health Report
+    </button>
+  </section>
+
+  <section class="card">
+    <h2>Mission Information</h2>
+    <p>Monitoring mode: Local / Offline</p>
+    <p>Storage: This browser on this device</p>
+    <p>Communication with Earth: Not connected</p>
+    <p class="notice">
+      Reports can be exported for later review by the
+      astronaut's medical team.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  ASTRA CARE | NASA Space Apps Challenge 2026
+  <br>Student-developed prototype
+</footer>
+
+<script>
+let records = [];
+
+try {
+  records = JSON.parse(
+    localStorage.getItem("astraRecords") || "[]"
+  );
+} catch(e) {
+  records = [];
+}
+
+function updateDashboard() {
+  const latest = records[0];
+
+  if (!latest) return;
+
+  document.getElementById("heart").textContent =
+    latest.heart;
+
+  document.getElementById("bp").textContent =
+    latest.sys + "/" + latest.dia;
+
+  document.getElementById("sleep").textContent =
+    latest.sleep;
+
+  document.getElementById("mood").textContent =
+    latest.mood;
+
+  document.getElementById("history").innerHTML =
+    records.map(r => `
+      <div class="entry">
+        <strong>${r.date}</strong><br>
+        Heart rate: ${r.heart} BPM |
+        BP: ${r.sys}/${r.dia} mmHg<br>
+        Sleep: ${r.sleep} hours |
+        Mood: ${r.mood}
+      </div>
+    `).join("");
+}
+
+document.getElementById("healthForm")
+.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const record = {
+    date: new Date().toLocaleString(),
+    heart: Number(document.getElementById("heartInput").value),
+    sys: Number(document.getElementById("sysInput").value),
+    dia: Number(document.getElementById("diaInput").value),
+    sleep: Number(document.getElementById("sleepInput").value),
+    mood: document.getElementById("moodInput").value
+  };
+
+  if (
+    record.heart <= 0 ||
+    record.sys <= 0 ||
+    record.dia <= 0 ||
+    record.sleep < 0
+  ) {
+    alert("Please enter valid measurements.");
+    return;
+  }
+
+  records.unshift(record);
+
+  try {
+    localStorage.setItem(
+      "astraRecords", JSON.stringify(records)
+    );
+  } catch(error) {
+    records.shift();
+    alert("Could not save data on this device.");
+    return;
+  }
+
+  updateDashboard();
+  this.reset();
+  alert("Health check-in saved successfully.");
+});
+
+function downloadReport() {
+  if (!records.length) {
+    alert("No health readings to export.");
+    return;
+  }
+
+  const report = [
+    "ASTRA CARE - HEALTH REPORT",
+    "DEMO DATA - NOT A MEDICAL DIAGNOSIS",
+    "",
+    ...records.map(r =>
+      `${r.date} | HR: ${r.heart} BPM | BP: ${r.sys}/${r.dia} | Sleep: ${r.sleep} hours | Mood: ${r.mood}`
+    )
+  ].join("\n");
+
+  const file = new Blob([report], {
+    type: "text/plain"
+  });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(file);
+  link.download = "astra-health-report.txt";
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+updateDashboard();
+</script>
+
+</body>
+</html>
